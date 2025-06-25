@@ -34,7 +34,7 @@ export default function ProductLinesPage(): React.JSX.Element {
       setLoading(true);
       setError(null);
       
-      const response = await apiClient.get<any>('/api/admin/product-lines');
+      const response = await apiClient.get<any>('api/admin/product-lines');
       console.log('Product Lines API Response:', response);
       setProductLines(response.data);
     } catch (error) {

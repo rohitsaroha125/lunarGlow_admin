@@ -37,7 +37,7 @@ export default function SkinTypePage(): React.JSX.Element {
       setLoading(true);
       setError(null);
       
-      const response = await apiClient.get<any>('/api/admin/skin-types');
+      const response = await apiClient.get<any>('api/admin/skin-types');
       console.log('Skin Types API Response:', response);
       setSkinTypes(response.data);
       // @ts-ignore

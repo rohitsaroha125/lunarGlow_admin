@@ -28,7 +28,7 @@ export default function SkinConcernsPage(): React.JSX.Element {
       setLoading(true);
       setError(null);
       
-      const response = await apiClient.get<any>('/api/admin/skin-concerns');
+      const response = await apiClient.get<any>('api/admin/skin-concerns');
       console.log('Skin Concerns API Response:', response);
       setSkinConcerns(response.data);
     } catch (error) {

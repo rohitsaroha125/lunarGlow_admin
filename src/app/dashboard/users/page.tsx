@@ -49,7 +49,7 @@ export default function UsersPage(): React.JSX.Element {
       setLoading(true);
       setError(null);
       
-      const response = await apiClient.get<PaginatedUsersResponse>(`/api/admin/users?page=${page}&limit=${limit}`);
+      const response = await apiClient.get<PaginatedUsersResponse>(`api/admin/users?page=${page}&limit=${limit}`);
   
       setUsers(response.data);
       // @ts-ignore

@@ -61,7 +61,7 @@ export default function ProductGlobalPage(): React.JSX.Element {
       setLoading(true);
       setError(null);
       
-      const response = await apiClient.get<any>(`/api/admin/products-global?page=${page}&limit=${limit}`);
+      const response = await apiClient.get<any>(`api/admin/products-global?page=${page}&limit=${limit}`);
       console.log('Product Global API Response:', response);
       setProducts(response.data);
       // @ts-ignore

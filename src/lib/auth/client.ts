@@ -69,7 +69,7 @@ class AuthClient {
 
     try {
       const apiUrl = getApiUrl();
-      const response = await fetch(`${apiUrl}/api/auth/admin/signin`, {
+      const response = await fetch(`${apiUrl}api/auth/admin/signin`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

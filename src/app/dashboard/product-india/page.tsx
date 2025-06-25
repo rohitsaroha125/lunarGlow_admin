@@ -61,7 +61,7 @@ export default function ProductIndiaPage(): React.JSX.Element {
       setLoading(true);
       setError(null);
       
-      const response = await apiClient.get<any>(`/api/admin/products-india?page=${page}&limit=${limit}`);
+      const response = await apiClient.get<any>(`api/admin/products-india?page=${page}&limit=${limit}`);
       console.log('Product India API Response:', response);
       setProducts(response.data);
       // @ts-ignore
