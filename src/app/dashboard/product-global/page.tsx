@@ -1,0 +1,270 @@
+'use client';
+
+import * as React from 'react';
+import dayjs from 'dayjs';
+
+import { DataTable, type DataTableColumn } from '@/components/dashboard/shared/data-table';
+import { Chip } from '@mui/material';
+import { Alert, CircularProgress, Box, Button } from '@mui/material';
+import { apiClient } from '@/lib/api-client';
+
+interface SkinType {
+  _id: string;
+  name: string;
+  slug: string;
+}
+
+interface SkinConcern {
+  _id: string;
+  name: string;
+  slug: string;
+}
+
+interface ProductLine {
+  _id: string;
+  name: string;
+  slug: string;
+  skin_type: SkinType;
+  skin_concern: SkinConcern;
+  sensitivity: SkinType | null;
+}
+
+interface ProductGlobal {
+  _id: string;
+  name: string;
+  productLine: ProductLine;
+  amazonLink: string;
+  ratings: number;
+  image: string;
+}
+
+interface PaginationInfo {
+  currentPage: number;
+  totalPages: number;
+  totalProducts: number;
+  limit: number;
+  hasNextPage: boolean;
+  hasPrevPage: boolean;
+  nextPage: number | null;
+  prevPage: number | null;
+}
+
+interface ProductGlobalResponse {
+  success: boolean;
+  data: ProductGlobal[];
+  pagination: PaginationInfo;
+}
+
+export default function ProductGlobalPage(): React.JSX.Element {
+  const [products, setProducts] = React.useState<ProductGlobal[]>([]);
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState<string | null>(null);
+  const [pagination, setPagination] = React.useState<PaginationInfo | null>(null);
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const [pageSize, setPageSize] = React.useState(50);
+
+  const fetchProducts = React.useCallback(async (page: number = 1, limit: number = 10) => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      const response = await apiClient.get<any>(`/api/admin/products-global?page=${page}&limit=${limit}`);
+      console.log('Product Global API Response:', response);
+      setProducts(response.data);
+      // @ts-ignore
+      setPagination(response.pagination);
+      setCurrentPage(page);
+      setPageSize(limit);
+    } catch (err) {
+      console.error('Error fetching global products:', err);
+      setError(err instanceof Error ? err.message : 'Failed to fetch global products');
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  React.useEffect(() => {
+    fetchProducts(1, 50);
+  }, [fetchProducts]);
+
+  const handlePageChange = React.useCallback((newPage: number) => {
+    fetchProducts(newPage, pageSize);
+  }, [fetchProducts, pageSize]);
+
+  const handlePageSizeChange = React.useCallback((newPageSize: number) => {
+    fetchProducts(1, newPageSize);
+  }, [fetchProducts]);
+
+  const columns: DataTableColumn[] = React.useMemo(() => [
+    {
+      id: 'name',
+      label: 'Product Name',
+      width: 300,
+      format: (value: any) => (
+        <div style={{ fontWeight: 600, fontSize: '0.875rem', lineHeight: '1.4' }}>
+          {value}
+        </div>
+      ),
+    },
+    {
+      id: 'productLine',
+      label: 'Product Line',
+      width: 150,
+      format: (value: any) => (
+        <div style={{ fontSize: '0.875rem' }}>
+          <div style={{ fontWeight: 500 }}>{value.name}</div>
+          <div style={{ fontSize: '0.75rem', color: 'text.secondary', fontFamily: 'monospace' }}>
+            {value.slug}
+          </div>
+        </div>
+      ),
+    },
+    {
+      id: 'skin_type',
+      label: 'Skin Type',
+      width: 100,
+      format: (value: any, row: any) => (
+        row.productLine?.skin_type ? (
+          <Chip
+            label={row.productLine.skin_type.name}
+            size="small"
+            variant="outlined"
+            color="primary"
+          />
+        ) : (
+          <span style={{ color: 'text.secondary', fontSize: '0.875rem' }}>-</span>
+        )
+      ),
+    },
+    {
+      id: 'skin_concern',
+      label: 'Skin Concern',
+      width: 120,
+      format: (value: any, row: any) => (
+        row.productLine?.skin_concern ? (
+          <Chip
+            label={row.productLine.skin_concern.name}
+            size="small"
+            variant="outlined"
+            color="secondary"
+          />
+        ) : (
+          <span style={{ color: 'text.secondary', fontSize: '0.875rem' }}>-</span>
+        )
+      ),
+    },
+    {
+      id: 'sensitivity',
+      label: 'Sensitivity',
+      width: 100,
+      format: (value: any, row: any) => (
+        row.productLine?.sensitivity ? (
+          <Chip
+            label={row.productLine.sensitivity.name}
+            size="small"
+            variant="outlined"
+            color="warning"
+          />
+        ) : (
+          <span style={{ color: 'text.secondary', fontSize: '0.875rem' }}>None</span>
+        )
+      ),
+    },
+    {
+      id: 'ratings',
+      label: 'Rating',
+      width: 80,
+      format: (value: any) => (
+        <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+          <span style={{ fontWeight: 500 }}>{value}</span>
+          <span style={{ color: 'text.secondary', fontSize: '0.75rem' }}>/5</span>
+        </div>
+      ),
+    },
+    {
+      id: 'amazonLink',
+      label: 'Amazon Link',
+      width: 120,
+      format: (value: any) => (
+        <Button
+          variant="outlined"
+          size="small"
+          href={value}
+          target="_blank"
+          rel="noopener noreferrer"
+          sx={{ fontSize: '0.75rem' }}
+        >
+          View
+        </Button>
+      ),
+    },
+  ], []);
+
+  const handleEdit = React.useCallback((product: any) => {
+    console.log('Edit global product:', product);
+    // TODO: Implement edit functionality
+  }, []);
+
+  const handleDelete = React.useCallback((product: any) => {
+    console.log('Delete global product:', product);
+    // TODO: Implement delete functionality
+  }, []);
+
+  const handleAdd = React.useCallback(() => {
+    console.log('Add new global product');
+    // TODO: Implement add functionality
+  }, []);
+
+  const handleRefresh = React.useCallback(() => {
+    fetchProducts(currentPage, pageSize);
+  }, [fetchProducts, currentPage, pageSize]);
+
+  console.log('Current global products state:', products);
+  console.log('Current pagination state:', pagination);
+  console.log('Global products length:', products?.length);
+
+  if (loading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '400px' }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  if (error) {
+    return (
+      <Box sx={{ p: 3 }}>
+        <Alert 
+          severity="error" 
+          action={
+            <Button color="inherit" size="small" onClick={handleRefresh}>
+              Retry
+            </Button>
+          }
+        >
+          {error}
+        </Alert>
+      </Box>
+    );
+  }
+
+  return (
+    <DataTable
+      title={`Global Products (${pagination?.totalProducts || products?.length || 0} total)`}
+      columns={columns}
+      data={products || []}
+      onEdit={handleEdit}
+      onDelete={handleDelete}
+      onAdd={handleAdd}
+      addButtonText="Add Global Product"
+      pagination={{
+        currentPage: pagination?.currentPage || 1,
+        totalPages: pagination?.totalPages || 1,
+        totalItems: pagination?.totalProducts || 0,
+        pageSize: pagination?.limit || 10,
+        onPageChange: handlePageChange,
+        onPageSizeChange: handlePageSizeChange,
+      }}
+    />
+  );
+} 
