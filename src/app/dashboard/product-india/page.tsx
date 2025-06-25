@@ -1,7 +1,6 @@
 'use client';
 
 import * as React from 'react';
-import dayjs from 'dayjs';
 
 import { DataTable, type DataTableColumn } from '@/components/dashboard/shared/data-table';
 import { Chip } from '@mui/material';
@@ -49,12 +48,6 @@ interface PaginationInfo {
   prevPage: number | null;
 }
 
-interface ProductIndiaResponse {
-  success: boolean;
-  data: ProductIndia[];
-  pagination: PaginationInfo;
-}
-
 export default function ProductIndiaPage(): React.JSX.Element {
   const [products, setProducts] = React.useState<ProductIndia[]>([]);
   const [loading, setLoading] = React.useState(true);
@@ -75,9 +68,9 @@ export default function ProductIndiaPage(): React.JSX.Element {
       setPagination(response.pagination);
       setCurrentPage(page);
       setPageSize(limit);
-    } catch (err) {
-      console.error('Error fetching India products:', err);
-      setError(err instanceof Error ? err.message : 'Failed to fetch India products');
+    } catch (error) {
+      console.error('Error fetching India products:', error);
+      setError(error instanceof Error ? error.message : 'Failed to fetch India products');
     } finally {
       setLoading(false);
     }

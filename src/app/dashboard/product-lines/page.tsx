@@ -24,12 +24,6 @@ interface ProductLine {
   updatedAt: string;
 }
 
-interface ProductLinesResponse {
-  success: boolean;
-  count: number;
-  data: ProductLine[];
-}
-
 export default function ProductLinesPage(): React.JSX.Element {
   const [productLines, setProductLines] = React.useState<ProductLine[]>([]);
   const [loading, setLoading] = React.useState(true);
@@ -43,9 +37,9 @@ export default function ProductLinesPage(): React.JSX.Element {
       const response = await apiClient.get<any>('/api/admin/product-lines');
       console.log('Product Lines API Response:', response);
       setProductLines(response.data);
-    } catch (err) {
-      console.error('Error fetching product lines:', err);
-      setError(err instanceof Error ? err.message : 'Failed to fetch product lines');
+    } catch (error) {
+      console.error('Error fetching product lines:', error);
+      setError(error instanceof Error ? error.message : 'Failed to fetch product lines');
     } finally {
       setLoading(false);
     }

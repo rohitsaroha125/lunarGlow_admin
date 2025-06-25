@@ -56,9 +56,9 @@ export default function UsersPage(): React.JSX.Element {
       setPagination(response.pagination);
       setCurrentPage(page);
       setPageSize(limit);
-    } catch (err) {
-      console.error('Error fetching users:', err);
-      setError(err instanceof Error ? err.message : 'Failed to fetch users');
+    } catch (error) {
+      console.error('Error fetching users:', error);
+      setError(error instanceof Error ? error.message : 'Failed to fetch users');
     } finally {
       setLoading(false);
     }

@@ -1,7 +1,6 @@
 'use client';
 
 import * as React from 'react';
-import dayjs from 'dayjs';
 
 import { DataTable, type DataTableColumn } from '@/components/dashboard/shared/data-table';
 import { Chip } from '@mui/material';
@@ -49,12 +48,6 @@ interface PaginationInfo {
   prevPage: number | null;
 }
 
-interface ProductGlobalResponse {
-  success: boolean;
-  data: ProductGlobal[];
-  pagination: PaginationInfo;
-}
-
 export default function ProductGlobalPage(): React.JSX.Element {
   const [products, setProducts] = React.useState<ProductGlobal[]>([]);
   const [loading, setLoading] = React.useState(true);
@@ -75,9 +68,9 @@ export default function ProductGlobalPage(): React.JSX.Element {
       setPagination(response.pagination);
       setCurrentPage(page);
       setPageSize(limit);
-    } catch (err) {
-      console.error('Error fetching global products:', err);
-      setError(err instanceof Error ? err.message : 'Failed to fetch global products');
+    } catch (error) {
+      console.error('Error fetching global products:', error);
+      setError(error instanceof Error ? error.message : 'Failed to fetch global products');
     } finally {
       setLoading(false);
     }

@@ -4,7 +4,6 @@ import * as React from 'react';
 import dayjs from 'dayjs';
 
 import { DataTable, type DataTableColumn } from '@/components/dashboard/shared/data-table';
-import { Chip } from '@mui/material';
 import { Alert, CircularProgress, Box, Button } from '@mui/material';
 import { apiClient } from '@/lib/api-client';
 
@@ -27,12 +26,6 @@ interface PaginationInfo {
   prevPage: number | null;
 }
 
-interface SkinTypesResponse {
-  success: boolean;
-  data: SkinType[];
-  pagination: PaginationInfo;
-}
-
 export default function SkinTypePage(): React.JSX.Element {
   const [skinTypes, setSkinTypes] = React.useState<SkinType[]>([]);
   const [loading, setLoading] = React.useState(true);
@@ -49,9 +42,9 @@ export default function SkinTypePage(): React.JSX.Element {
       setSkinTypes(response.data);
       // @ts-ignore
       setPagination(response.pagination);
-    } catch (err) {
-      console.error('Error fetching skin types:', err);
-      setError(err instanceof Error ? err.message : 'Failed to fetch skin types');
+    } catch (error) {
+      console.error('Error fetching skin types:', error);
+      setError(error instanceof Error ? error.message : 'Failed to fetch skin types');
     } finally {
       setLoading(false);
     }

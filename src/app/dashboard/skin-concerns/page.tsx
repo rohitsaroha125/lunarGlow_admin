@@ -18,12 +18,6 @@ interface SkinConcern {
   face_map?: string;
 }
 
-interface SkinConcernsResponse {
-  success: boolean;
-  count: number;
-  data: SkinConcern[];
-}
-
 export default function SkinConcernsPage(): React.JSX.Element {
   const [skinConcerns, setSkinConcerns] = React.useState<SkinConcern[]>([]);
   const [loading, setLoading] = React.useState(true);
@@ -37,9 +31,9 @@ export default function SkinConcernsPage(): React.JSX.Element {
       const response = await apiClient.get<any>('/api/admin/skin-concerns');
       console.log('Skin Concerns API Response:', response);
       setSkinConcerns(response.data);
-    } catch (err) {
-      console.error('Error fetching skin concerns:', err);
-      setError(err instanceof Error ? err.message : 'Failed to fetch skin concerns');
+    } catch (error) {
+      console.error('Error fetching skin concerns:', error);
+      setError(error instanceof Error ? error.message : 'Failed to fetch skin concerns');
     } finally {
       setLoading(false);
     }
