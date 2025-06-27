@@ -73,19 +73,43 @@ export default function ProductLinesPage(): React.JSX.Element {
     {
       id: 'skin_type',
       label: 'Skin Type',
-      width: 120,
-      format: (value: any) => (
-        value ? (
+      width: 200,
+      format: (value: any) => {
+        if (!value) {
+          return <span style={{ color: 'text.secondary', fontSize: '0.875rem' }}>-</span>;
+        }
+        
+        // Handle array of skin types
+        if (Array.isArray(value)) {
+          if (value.length === 0) {
+            return <span style={{ color: 'text.secondary', fontSize: '0.875rem' }}>-</span>;
+          }
+          
+          return (
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
+              {value.map((skinType: any, index: number) => (
+                <Chip
+                  key={skinType._id || index}
+                  label={skinType.name}
+                  size="small"
+                  variant="outlined"
+                  color="primary"
+                />
+              ))}
+            </div>
+          );
+        }
+        
+        // Handle single skin type object
+        return (
           <Chip
             label={value.name}
             size="small"
             variant="outlined"
             color="primary"
           />
-        ) : (
-          <span style={{ color: 'text.secondary', fontSize: '0.875rem' }}>-</span>
-        )
-      ),
+        );
+      },
     },
     {
       id: 'sensitivity',
