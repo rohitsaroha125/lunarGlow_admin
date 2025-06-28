@@ -100,6 +100,46 @@ export default function ProductGlobalPage(): React.JSX.Element {
       ),
     },
     {
+      id: 'image',
+      label: 'Image',
+      width: 100,
+      format: (value: any) => (
+        value ? (
+          <img
+            src={value}
+            alt="Product"
+            style={{
+              width: 60,
+              height: 60,
+              objectFit: 'cover',
+              borderRadius: 8,
+              border: '1px solid #e0e0e0'
+            }}
+            onError={(e) => {
+              e.currentTarget.style.display = 'none';
+            }}
+          />
+        ) : (
+          <div
+            style={{
+              width: 60,
+              height: 60,
+              backgroundColor: '#f5f5f5',
+              borderRadius: 8,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '0.75rem',
+              color: '#999',
+              border: '1px solid #e0e0e0'
+            }}
+          >
+            No Image
+          </div>
+        )
+      ),
+    },
+    {
       id: 'productLine',
       label: 'Product Line',
       width: 150,
