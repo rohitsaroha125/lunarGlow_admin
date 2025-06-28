@@ -112,6 +112,23 @@ export default function ProductLinesPage(): React.JSX.Element {
       },
     },
     {
+      id: 'skin_concern',
+      label: 'Skin Concern',
+      width: 150,
+      format: (value: any) => (
+        value ? (
+          <Chip
+            label={value.name}
+            size="small"
+            variant="outlined"
+            color="info"
+          />
+        ) : (
+          <span style={{ color: 'text.secondary', fontSize: '0.875rem' }}>-</span>
+        )
+      ),
+    },
+    {
       id: 'sensitivity',
       label: 'Sensitivity',
       width: 120,
